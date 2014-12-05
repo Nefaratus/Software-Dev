@@ -39,7 +39,8 @@ public class TrafficSystem extends Thread {
     TrafficLight ZW = new TrafficLight("ZW");
     TrafficLight ZN = new TrafficLight("ZN");
     
-    TrafficLight currentLight;
+    
+    
     public boolean next = true;
     
     private boolean running = true;
@@ -74,15 +75,18 @@ public class TrafficSystem extends Thread {
                     {
                         if(message[to] == 'W')
                         {   
-                            LightHandler(NW, message[type],message[amount]);
+                            //LightHandler(NW, message[type],message[amount]);
+                            NW.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'O')
                         {                              
-                            LightHandler(NO, message[type],message[amount]);
+                            //LightHandler(NO, message[type],message[amount]);
+                            NO.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'Z')
                         {   
-                            LightHandler(NZ, message[type],message[amount]);
+                            //LightHandler(NZ, message[type],message[amount]);
+                            NZ.ChangeAmount(message[amount]);
                         }
                     }
                         
@@ -90,11 +94,13 @@ public class TrafficSystem extends Thread {
                     {
                         if(message[to] == 'N')
                         {   
-                            LightHandler(ON, message[type],message[amount]);
+                            //LightHandler(ON, message[type],message[amount]);
+                            ON.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'W')
                         {    
-                            LightHandler(OW, message[type],message[amount]);
+                            //LightHandler(OW, message[type],message[amount]);
+                            OW.ChangeAmount(message[amount]);
                         }
                     }
                     
@@ -102,15 +108,18 @@ public class TrafficSystem extends Thread {
                     {
                         if(message[to] == 'N')
                         {  
-                            LightHandler(WN, message[type],message[amount]);
+                            //LightHandler(WN, message[type],message[amount]);
+                            WN.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'Z')
                         {   
-                            LightHandler(WZ, message[type],message[amount]);
+                            //LightHandler(WZ, message[type],message[amount]);
+                            WZ.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'O')
                         {   
-                            LightHandler(WO, message[type],message[amount]);
+                            //LightHandler(WO, message[type],message[amount]);
+                            WO.ChangeAmount(message[amount]);
                         }
                     }
                     
@@ -118,23 +127,30 @@ public class TrafficSystem extends Thread {
                     {
                         if(message[to] == 'W')
                         {                               
-                            LightHandler(ZW, message[type], message[amount]);
+                            //LightHandler(ZW, message[type], message[amount]);
+                            ZW.ChangeAmount(message[amount]);
                         }
                         if(message[to] == 'N' || message[2] == 'O')
                         {   
-                            LightHandler(ZN,message[type],message[amount]);
+                            //LightHandler(ZN,message[type],message[amount]);
+                            ZN.ChangeAmount(message[amount]);
                         }
                     }
         
                 
     }
-    
+    /*
     public void LightHandler(TrafficLight light, char type ,char amount)
     {
      //   light.StartTimer(0);
         light.ChangeAmount(amount);
+        
+        /* 
+            Hierin moet het licht worden aangezet op basis van de grootste amount.
+            Beste om te doen is amount van alle stoplichten vergelijken en de grootste een go geven samen met de meerdere opties.
+        * / 
     }
-    
+    */
     
     public void CheckPossibilities()
     {
@@ -162,40 +178,12 @@ public class TrafficSystem extends Thread {
             
             try
             {
-             if(currentLight.stat == "Done")
-                {
-                    Lock.Release();
-                }
             }catch(Exception e)
             {
                 
             }
 
         }
-        /*
-        
-        if(next == true)
-        {
-            
-            
-            Collections.sort(traficLightPriorList, new Comparator<TraficLight>() {
-            public int compare(TraficLight o1, TraficLight o2) {
-                return o1.prio > o2.prio ? -1 : o1.prio == o2.prio ? 0 : 1;
-            }
-        });
-       /*
-       
-       Lijst sorteren en kijken welke stoplichten aan en uit kunnen
-        
-       Logica voor welke prior eerst moet hierin
-       
-      
-       
-       current_TraficLight = traficLightPriorList.get(1);  
-       current_TraficLight.StartTimer(0);
-       traficLightPriorList.remove(current_TraficLight);
-                
-       } */
     }
     
       
