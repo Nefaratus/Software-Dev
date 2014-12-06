@@ -34,11 +34,6 @@ public class TrafficLight {
         this.type = type;
     }
     
-    public int GetAmount()
-    {
-        return amount;
-    }
-    
     public void ChangeAmount(char amount)
     { 
         int n_amount = Character.getNumericValue(amount);
