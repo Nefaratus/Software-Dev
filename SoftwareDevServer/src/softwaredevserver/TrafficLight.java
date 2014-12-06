@@ -14,12 +14,11 @@ import java.util.TimerTask;
 public class TrafficLight {
     
     public int status = 1;
-    public String stat, response;
+    public String stat, stoplight;
     private char type;
     public boolean active;
-    public int prio,amount,trigger;
-    public SoftwareDevServer soft; 
-    public String stoplight;
+    public int amount;
+    public SoftwareDevServer soft;
     
     
     public TrafficLight(String trafficLight)
@@ -29,19 +28,36 @@ public class TrafficLight {
         this.stoplight = trafficLight;        
     }
     
-    public void Type(char type)
+    public void setType(char type)
     {
         this.type = type;
     }
     
-    public void ChangeAmount(char amount)
+    public void changeAmount(char amount)
     { 
         int n_amount = Character.getNumericValue(amount);
         if(n_amount >= this.amount)
         {
             this.amount = n_amount;
         }
-        System.out.println(stoplight + " " + amount );
+    }
+    
+    public boolean checkActive()
+    {
+        if(active == true)
+            return true;
+        else
+            return false;
+    }
+    
+    public void resetAmount()
+    {
+        amount = 0;
+    }
+    
+    public int getAmount()
+    {
+        return amount;
     }
     
     public String Status()
@@ -49,10 +65,8 @@ public class TrafficLight {
         switch(status)
         {     
             case 1: stat = "R";    //Red        
-                    StartTimer(2);                    
+                    StartTimer(2);  
                     active = false;
-                    soft.active = true;
-                    System.out.println(status);
                     break;                
             case 2: stat = "G";    //Green    
                     StartTimer(6);
@@ -90,15 +104,14 @@ public class TrafficLight {
                     timer.cancel();
                     if(active == true)
                     {
-                             NextStatus();
-                             soft.mServer.sent(stoplight+type+Status());
+                        NextStatus();
+                        //soft.mServer.sent(stoplight+type+Status());
+                        System.out.println(stoplight+type+Status());
                     }
                     else
                     {
-                        status = 0;
+                        status = 0;                        
                     }
-                   //System.out.println(stoplight+"A"+Status());
-                   
                 }
             }
         }, 0, 1000);

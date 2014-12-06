@@ -44,8 +44,8 @@ public class TrafficSystem extends Thread {
     TrafficLight fiets2 = new TrafficLight("Fiets");
     TrafficLight fiets3 = new TrafficLight("Fiets");
     
-    
     TrafficLight highestPrior;
+    TrafficLight prevLight;
     
     public boolean next = true;
     
@@ -62,12 +62,14 @@ public class TrafficSystem extends Thread {
     
     public TrafficSystem()
     {
-
+        prevLight = new TrafficLight("placeHolder");
+        prevLight.active = false;
+        
     }
     
     public void MessageHandler(char[] message)
     {
-        System.out.println(message);
+        //System.out.println(message);
 
         /* 
         er moet hier al gekeken worden voor welk type het is.
@@ -101,15 +103,15 @@ public class TrafficSystem extends Thread {
             {
                 if(message[to] == 'W')
                 {   
-                    LightHandler(NW, message[type],message[amount]);
+                    setStoplights(NW, message[type],message[amount]);
                 }
                 if(message[to] == 'O')
                 {                              
-                    LightHandler(NO, message[type],message[amount]);
+                    setStoplights(NO, message[type],message[amount]);
                 }
                 if(message[to] == 'Z')
                 {   
-                    LightHandler(NZ, message[type],message[amount]);
+                    setStoplights(NZ, message[type],message[amount]);
                 }
             }
 
@@ -117,11 +119,11 @@ public class TrafficSystem extends Thread {
             {
                 if(message[to] == 'N')
                 {   
-                    LightHandler(ON, message[type],message[amount]);
+                    setStoplights(ON, message[type],message[amount]);
                 }
                 if(message[to] == 'W')
                 {    
-                    LightHandler(OW, message[type],message[amount]);
+                    setStoplights(OW, message[type],message[amount]);
                 }
             }
 
@@ -129,15 +131,15 @@ public class TrafficSystem extends Thread {
             {
                 if(message[to] == 'N')
                 {  
-                    LightHandler(WN, message[type],message[amount]);
+                    setStoplights(WN, message[type],message[amount]);
                 }
                 if(message[to] == 'Z')
                 {   
-                    LightHandler(WZ, message[type],message[amount]);
+                    setStoplights(WZ, message[type],message[amount]);
                 }
                 if(message[to] == 'O')
                 {   
-                    LightHandler(WO, message[type],message[amount]);
+                    setStoplights(WO, message[type],message[amount]);
                 }
             }
 
@@ -145,28 +147,58 @@ public class TrafficSystem extends Thread {
             {
                 if(message[to] == 'W')
                 {                               
-                    LightHandler(ZW, message[type], message[amount]);
+                    setStoplights(ZW, message[type], message[amount]);
                 }
                 if(message[to] == 'N' || message[2] == 'O')
                 {   
-                    LightHandler(ZN,message[type],message[amount]);
+                    setStoplights(ZN,message[type],message[amount]);
                 }
             }
-        }
-                
+        }                
     }
     
-    public void LightHandler(TrafficLight c_light, char type ,char amount)
+    public void setStoplights(TrafficLight c_Light, char type ,char amount)
     {
-        c_light.ChangeAmount(amount);
-        if(c_light.amount > highestPrior.amount)                    
-             highestPrior = c_light;
-        
-        highestPrior.StartTimer(0);
+        c_Light.changeAmount(amount);
+        if(highestPrior == null)
+            highestPrior = c_Light;
     }
     
+    public void CheckHighestAmount()
+    {
+        if(highestPrior != null);
+        {
+            highestPrior = (NW.getAmount() > highestPrior.getAmount() ? NW : highestPrior);
+            highestPrior = (NO.getAmount() > highestPrior.getAmount() ? NO : highestPrior);
+            highestPrior = (NZ.getAmount() > highestPrior.getAmount() ? NZ : highestPrior);
+
+            highestPrior = (ON.getAmount() > highestPrior.getAmount() ? ON : highestPrior);
+            highestPrior = (OW.getAmount() > highestPrior.getAmount() ? OW : highestPrior);
+
+            highestPrior = (WN.getAmount() > highestPrior.getAmount() ? WN : highestPrior);
+            highestPrior = (WZ.getAmount() > highestPrior.getAmount() ? WZ : highestPrior);
+            highestPrior = (WO.getAmount() > highestPrior.getAmount() ? WO : highestPrior);
+
+            highestPrior = (ZW.getAmount() > highestPrior.getAmount() ? ZW : highestPrior);
+            highestPrior = (ZN.getAmount() > highestPrior.getAmount() ? ZN : highestPrior);
+        }
+        
+               
+    }
     
-    
+    public void NextLight()
+    {
+        if(highestPrior.amount > 0)
+        {
+            highestPrior.status = 1;
+            highestPrior.StartTimer(0);
+            System.out.println(highestPrior.stoplight + " " + highestPrior.amount); 
+            prevLight = highestPrior;
+            //System.out.println(prevLight.stoplight); 
+            prevLight.resetAmount();
+        }
+    }
+ 
     public void CheckPossibilities()
     {
         
@@ -174,32 +206,18 @@ public class TrafficSystem extends Thread {
     
     
     public void run()
-    {       
-        
+    {  
         while(running)
-        {         
-            try
+        {   
+            if(prevLight.checkActive() == false)
             {
-            if(Lock.lock == true)
-            {
-
-                Lock.Lock();
-                
+                CheckHighestAmount();
+                NextLight();                
             }
-            }catch(Exception e)
-            {
-                
+            else
+            {                
+                CheckHighestAmount();
             }
-            
-            try
-            {
-            }catch(Exception e)
-            {
-                
-            }
-
         }
     }
-    
-      
 }

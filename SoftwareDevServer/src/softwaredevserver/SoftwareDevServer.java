@@ -30,24 +30,16 @@ public class SoftwareDevServer {
         
         Frame();
         mServer.start(); 
-        //sys.start();
-        /*
-       String test = "1NWA";
-       String test2 = "1ZWA";
+        sys.start();
+        
+       String test = "1NWA1";
+       String test2 = "1ZWA9";
        String test3 = "1NWA";
        String test4 = "1NWA";
        String test5 = "1ZWA";
        String test6 = "1NWA";
-       sys.addToList(test);
-       sys.addToList(test2);
-       sys.addToList(test3);
-       sys.addToList(test4);
-       sys.addToList(test5);       
-       sys.addToList(test6);
-                */
-       
- 
-
+       sys.MessageHandler(test.toCharArray());
+       sys.MessageHandler(test2.toCharArray());
 
     }
     

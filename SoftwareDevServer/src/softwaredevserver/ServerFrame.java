@@ -50,6 +50,7 @@ public class ServerFrame extends JFrame implements ActionListener {
             String message = Chat.getText();
            // soft.mServer.sent(message);
             TekstArea.append("Server: " + message + "\n");
+            soft.sys.MessageHandler(message.toCharArray());
                        
             
         }
