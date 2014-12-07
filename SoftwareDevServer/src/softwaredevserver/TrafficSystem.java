@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -62,6 +64,7 @@ public class TrafficSystem extends Thread {
     
     public TrafficSystem()
     {
+        highestPrior = new TrafficLight("placeHolder");
         prevLight = new TrafficLight("placeHolder");
         prevLight.active = false;
         
@@ -191,8 +194,7 @@ public class TrafficSystem extends Thread {
         if(highestPrior.amount > 0)
         {
             highestPrior.status = 1;
-            highestPrior.StartTimer(0);
-            System.out.println(highestPrior.stoplight + " " + highestPrior.amount); 
+            highestPrior.StartTimer(0); 
             prevLight = highestPrior;
             //System.out.println(prevLight.stoplight); 
             prevLight.resetAmount();
@@ -211,13 +213,19 @@ public class TrafficSystem extends Thread {
         {   
             if(prevLight.checkActive() == false)
             {
-                CheckHighestAmount();
-                NextLight();                
+                CheckHighestAmount();                
+                NextLight();      
+                System.out.println(prevLight.stoplight + " amount : " + prevLight.getAmount());          
             }
             else
             {                
                 CheckHighestAmount();
             }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TrafficSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }            
         }
     }
 }

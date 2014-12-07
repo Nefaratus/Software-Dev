@@ -105,7 +105,7 @@ public class TrafficLight {
                     if(active == true)
                     {
                         NextStatus();
-                        //soft.mServer.sent(stoplight+type+Status());
+                        soft.mServer.sent(stoplight+type+Status());
                         System.out.println(stoplight+type+Status());
                     }
                     else

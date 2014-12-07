@@ -38,8 +38,8 @@ public class SoftwareDevServer {
        String test4 = "1NWA";
        String test5 = "1ZWA";
        String test6 = "1NWA";
-       sys.MessageHandler(test.toCharArray());
-       sys.MessageHandler(test2.toCharArray());
+       //sys.MessageHandler(test.toCharArray());
+       //sys.MessageHandler(test2.toCharArray());
 
     }
     
