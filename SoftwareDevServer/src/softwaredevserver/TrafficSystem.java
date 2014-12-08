@@ -64,8 +64,8 @@ public class TrafficSystem extends Thread {
     
     public TrafficSystem()
     {
-        highestPrior = new TrafficLight("placeHolder");
-        prevLight = new TrafficLight("placeHolder");
+        highestPrior = new TrafficLight("PlaceHolder highest");
+        prevLight = new TrafficLight("placeHolder prev");
         prevLight.active = false;
         
     }
@@ -171,7 +171,7 @@ public class TrafficSystem extends Thread {
     {
         if(highestPrior != null);
         {
-            highestPrior = (NW.getAmount() > highestPrior.getAmount() ? NW : highestPrior);
+            highestPrior = (NW.getAmount() > highestPrior.getAmount() ? NW : highestPrior);          
             highestPrior = (NO.getAmount() > highestPrior.getAmount() ? NO : highestPrior);
             highestPrior = (NZ.getAmount() > highestPrior.getAmount() ? NZ : highestPrior);
 
@@ -184,6 +184,8 @@ public class TrafficSystem extends Thread {
 
             highestPrior = (ZW.getAmount() > highestPrior.getAmount() ? ZW : highestPrior);
             highestPrior = (ZN.getAmount() > highestPrior.getAmount() ? ZN : highestPrior);
+
+            System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());  
         }
         
                
@@ -193,10 +195,10 @@ public class TrafficSystem extends Thread {
     {
         if(highestPrior.amount > 0)
         {
-            highestPrior.status = 1;
+            System.out.println("Next Light : " + highestPrior.stoplight); 
+            highestPrior.active = true;
             highestPrior.StartTimer(0); 
             prevLight = highestPrior;
-            //System.out.println(prevLight.stoplight); 
             prevLight.resetAmount();
         }
     }
@@ -213,9 +215,8 @@ public class TrafficSystem extends Thread {
         {   
             if(prevLight.checkActive() == false)
             {
-                CheckHighestAmount();                
-                NextLight();      
-                System.out.println(prevLight.stoplight + " amount : " + prevLight.getAmount());          
+                CheckHighestAmount();              
+                NextLight();    
             }
             else
             {                

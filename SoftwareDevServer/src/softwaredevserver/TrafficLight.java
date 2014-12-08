@@ -4,8 +4,10 @@
  */
 package softwaredevserver;
 
-import java.util.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.TimerTask;
+import javax.swing.Timer;
 
 /**
  *
@@ -19,7 +21,9 @@ public class TrafficLight {
     public boolean active;
     public int amount;
     public SoftwareDevServer soft;
-    
+        
+       static Timer timer;
+        static int cnt = 0;
     
     public TrafficLight(String trafficLight)
     {
@@ -65,14 +69,17 @@ public class TrafficLight {
         switch(status)
         {     
             case 1: stat = "R";    //Red        
-                    StartTimer(2);  
+                    StartTimer(2);
+                    //Timer2(2);
                     active = false;
                     break;                
             case 2: stat = "G";    //Green    
                     StartTimer(6);
+                    //Timer2(6);
                     break;                
             case 3: stat = "O";   //Orange
                     StartTimer(4);
+                    //Timer2(4);
                     break;    
             default: stat = "Done";
         }
@@ -83,12 +90,16 @@ public class TrafficLight {
     public void NextStatus()
     {
         if (status < 3)
+        {
             status ++;
-        
+            System.out.println("BOEM");        
+        }
         else
+        {
             status = 1;
+            System.out.println("The else in " + stoplight + " NextSatus has been called");
+        }
     }
-    
     
      public void StartTimer(final int time)
     {        
@@ -105,16 +116,20 @@ public class TrafficLight {
                     if(active == true)
                     {
                         NextStatus();
-                        soft.mServer.sent(stoplight+type+Status());
-                        System.out.println(stoplight+type+Status());
+                        String c_Status = Status();
+                        soft.mServer.sent(stoplight+type+c_Status);
+                        System.out.println(stoplight+type+c_Status);
+                        soft.frame.TekstArea.append(stoplight+type+c_Status + "\n");
                     }
                     else
                     {
-                        status = 0;                        
+                        timer.cancel();                        
+                        //status = 0;                        
                     }
                 }
             }
         }, 0, 1000);
 
-    }   
-}
+    } 
+     
+  }

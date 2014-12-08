@@ -4,7 +4,10 @@
  */
 package softwaredevserver;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 /**
  *
@@ -18,12 +21,12 @@ public class SoftwareDevServer {
      */
     
     
-    
+ 
     static boolean active = true;
     static ServerFrame frame = new ServerFrame();
     static TrafficSystem sys;
     static String prevMessage;
-    
+
     public static void main(String[] args){
         
         sys = new TrafficSystem();
@@ -31,14 +34,13 @@ public class SoftwareDevServer {
         Frame();
         mServer.start(); 
         sys.start();
-        
        String test = "1NWA1";
        String test2 = "1ZWA9";
        String test3 = "1NWA";
        String test4 = "1NWA";
        String test5 = "1ZWA";
        String test6 = "1NWA";
-       //sys.MessageHandler(test.toCharArray());
+      // sys.MessageHandler(test.toCharArray());
        //sys.MessageHandler(test2.toCharArray());
 
     }
@@ -75,6 +77,9 @@ public class SoftwareDevServer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+    
+    
+
 }
   
 
