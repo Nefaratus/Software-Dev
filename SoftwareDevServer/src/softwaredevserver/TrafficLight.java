@@ -91,8 +91,7 @@ public class TrafficLight {
     {
         if (status < 3)
         {
-            status ++;
-            System.out.println("BOEM");        
+            status ++;      
         }
         else
         {
@@ -101,12 +100,12 @@ public class TrafficLight {
         }
     }
     
-     public void StartTimer(final int time)
+     public void StartTimer(final float time)
     {        
         final java.util.Timer timer = new java.util.Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             
-            int i = time;
+            float i = time;
             public void run() {
                 //System.out.println(i);
                 i--;
@@ -119,7 +118,7 @@ public class TrafficLight {
                         String c_Status = Status();
                         soft.mServer.sent(stoplight+type+c_Status);
                         System.out.println(stoplight+type+c_Status);
-                        soft.frame.TekstArea.append(stoplight+type+c_Status + "\n");
+                        soft.frame.TekstArea.append(stoplight+type+c_Status + " \n------------------------------------------------------------- \n");
                     }
                     else
                     {

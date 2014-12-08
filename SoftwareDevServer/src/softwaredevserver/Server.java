@@ -104,6 +104,7 @@ public class Server extends Thread {
 
         try {
            outw.println(sentString);
+           
          //  System.out.println(sentString);
 
         } catch (Exception ex) {
