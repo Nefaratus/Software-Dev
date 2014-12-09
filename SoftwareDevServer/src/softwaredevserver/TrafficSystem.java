@@ -41,7 +41,7 @@ public class TrafficSystem extends Thread {
     TrafficLight ZW = new TrafficLight("ZW");
     TrafficLight ZN = new TrafficLight("ZN");
    
-    TrafficLight Bus = new TrafficLight("BUS");
+    TrafficLight Bus = new TrafficLight("OWB");
     TrafficLight fiets1 = new TrafficLight("Fiets");
     TrafficLight fiets2 = new TrafficLight("Fiets");
     TrafficLight fiets3 = new TrafficLight("Fiets");
@@ -88,6 +88,8 @@ public class TrafficSystem extends Thread {
             /*
             hoogste prior
             */
+            setStoplights(Bus, message[type],message[amount]);
+            highestPrior = Bus;
         }        
         else if(message[type] == 'F')
         {
@@ -167,6 +169,7 @@ public class TrafficSystem extends Thread {
     public void setStoplights(TrafficLight c_Light, char type ,char amount)
     {
         c_Light.changeAmount(amount);
+        c_Light.setType(type);
         if(highestPrior == null)
             highestPrior = c_Light;
     }
@@ -228,6 +231,13 @@ public class TrafficSystem extends Thread {
             WO -> ON NW OW WN WZ
             WZ -> NO NW ON OW ZNO ZW WN WO
         */
+        
+        if(c_Light.stoplight == "OWB")
+        {
+            possibleLights = new TrafficLight[]{WO,WZ};
+            return possibleLights;
+        }
+        
         if(c_Light.stoplight == "NW")
         {
           possibleLights = new TrafficLight[]{NO,NZ,ON,ZN,WN,WO,WZ};                     
