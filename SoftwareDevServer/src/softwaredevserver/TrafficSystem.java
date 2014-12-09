@@ -47,8 +47,10 @@ public class TrafficSystem extends Thread {
     TrafficLight fiets3 = new TrafficLight("Fiets");
     
     TrafficLight highestPrior;
-    TrafficLight prevLight;
-    
+    TrafficLight prevLight;    
+    TrafficLight ThirdPrior = new TrafficLight("placeHolder");    
+    TrafficLight SecondPrior = new TrafficLight("placeHolder");
+   
     public boolean next = true;
     
     private boolean running = true;
@@ -67,6 +69,8 @@ public class TrafficSystem extends Thread {
         highestPrior = new TrafficLight("PlaceHolder highest");
         prevLight = new TrafficLight("placeHolder prev");
         prevLight.active = false;
+        ThirdPrior.active = false;
+        SecondPrior.active = false;
         
     }
     
@@ -204,9 +208,10 @@ public class TrafficSystem extends Thread {
                
     }
      
-    public void CheckPossibilities(TrafficLight c_Light)
+    public TrafficLight[] CheckPossibilities(TrafficLight c_Light)
     {
         TrafficLight[] possibleLights;
+        int done = 0;
         /*
         Mogelijke opties
             NW -> NO NZ ON OZ OW ZNO WN WO WZ
@@ -225,69 +230,106 @@ public class TrafficSystem extends Thread {
         */
         if(c_Light.stoplight == "NW")
         {
-          possibleLights = new TrafficLight[]{NO,NZ,ON,OW,ZN,WN,WO,WZ}; 
-          NextLights(possibleLights);
+          possibleLights = new TrafficLight[]{NO,NZ,ON,ZN,WN,WO,WZ};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "NZ")
+        if(c_Light.stoplight == "NZ")
         {
-          possibleLights = new TrafficLight[]{NO,NW,ON,ZN}; 
-          NextLights(possibleLights);
+          possibleLights = new TrafficLight[]{NO,NW,ON,ZN};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "NO")
+        if(c_Light.stoplight == "NO")
         {
-          possibleLights = new TrafficLight[]{NZ, NW, ON, WZ}; 
-          NextLights(possibleLights);
+          possibleLights = new TrafficLight[]{NZ, NW, ON, WZ};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "ZN")
+        if(c_Light.stoplight == "ZN")
         {
-          possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ};                    
+          return possibleLights; 
         }
-        else if(c_Light.stoplight == "ZW")
+        if(c_Light.stoplight == "ZW")
         {
-          possibleLights = new TrafficLight[]{ZN, ON, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{ZN, ON, WZ};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "ON")
+        if(c_Light.stoplight == "ON")
         {
-          possibleLights = new TrafficLight[]{NO, NZ, NW, OW, ZW, WO, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{NO, NZ, NW, OW, ZW, WO, WZ};                    
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "OW")
+        if(c_Light.stoplight == "OW")
         {
-          possibleLights = new TrafficLight[]{ON, WO, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{ON, WO, WZ};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "WN")
+        if(c_Light.stoplight == "WN")
         {
-          possibleLights = new TrafficLight[]{NW, WO, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{NW, WO, WZ};                     
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "WO")
+        if(c_Light.stoplight == "WO")
         {
-          possibleLights = new TrafficLight[]{ON, NW, OW, WN, WZ}; 
-          NextLights(possibleLights);            
+          possibleLights = new TrafficLight[]{ON, NW, OW, WN, WZ};                    
+          return possibleLights;
         }
-        else if(c_Light.stoplight == "WZ")
+        if(c_Light.stoplight == "WZ")
         {
-          possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO}; 
-          NextLights(possibleLights);            
-        }
-        
+          possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO};                    
+          return possibleLights;
+        }  
+        return null;
     }
     
-    public void NextLights(TrafficLight[] possibleLights)
+    public void SecondLight(TrafficLight[] possibleLights)
     {
-        TrafficLight SecondPrior = new TrafficLight("placeHolder");
-       // TrafficLight SecondPrior = new TrafficLight("placeHolder");
+        SecondPrior = possibleLights[1];
         for (int i = 0; i < possibleLights.length; i++) 
         {
-            SecondPrior = (possibleLights[i].amount > SecondPrior.amount ? possibleLights[i] : SecondPrior);
-        }
-        highestPrior.StartTimer(0);
+        System.out.println("From is possible with First as Light: " + possibleLights[i].stoplight);
+            if(possibleLights[i].amount > SecondPrior.amount)
+            {
+                String temp = possibleLights[i].stoplight;
+                if(!SecondPrior.stoplight.equals(temp))
+                    SecondPrior = possibleLights[i];
+            }
+        }        
+        System.out.println("Second is: " + SecondPrior.stoplight + "\n --------------------------------------------------- \n");
         SecondPrior.active = true;
-        SecondPrior.StartTimer(1);
-        SecondPrior.resetAmount();
+        SecondPrior.resetAmount(); 
+        //ActivateLights();
+        ThirdLight(CheckPossibilities(SecondPrior),possibleLights);
+    }
+    
+    public void ThirdLight(TrafficLight[] possibleLights, TrafficLight[] possibleFromSecond)
+    {
+        System.out.println(possibleLights.length);
+        for (int i = 0; i < possibleLights.length; i++) 
+        {
+            System.out.println("From is possible with Second as Light: " + possibleLights[i].stoplight);
+            for (int j = 0; j < possibleFromSecond.length; j++) {
+                if(possibleLights[i].stoplight == possibleFromSecond[j].stoplight)
+                {
+                    String temp = possibleLights[i].stoplight;
+                     if(!ThirdPrior.stoplight.equals(temp) && temp != highestPrior.stoplight && temp != SecondPrior.stoplight)
+                            ThirdPrior = possibleLights[i];
+                }
+            }
+            //if(possibleLights[i].stoplight != highestPrior.stoplight && possibleLights[i].stoplight != SecondPrior.stoplight )
+              //  ThirdPrior = (possibleLights[i].amount > ThirdPrior.amount ? possibleLights[i] : ThirdPrior);
+        }    
+        System.out.println("Thirdprior is: " + ThirdPrior.stoplight + "\n --------------------------------------------------- \n");
+        
+        ThirdPrior.active = true;
+        ThirdPrior.resetAmount();
+        ActivateLights();
+    }
+    
+    public void ActivateLights()
+    {
+        highestPrior.StartTimer(0);
+        SecondPrior.StartTimer(0.5f);        
+        ThirdPrior.StartTimer(1);
     }
     
     public void NextLight()
@@ -297,7 +339,8 @@ public class TrafficSystem extends Thread {
             System.out.println("Next Light : " + highestPrior.stoplight); 
             highestPrior.active = true;            
             //highestPrior.StartTimer(0);
-            CheckPossibilities(highestPrior);
+            //CheckPossibilities(highestPrior);
+            SecondLight(CheckPossibilities(highestPrior));
             prevLight = highestPrior;
             prevLight.resetAmount();
         }
@@ -308,7 +351,7 @@ public class TrafficSystem extends Thread {
     {  
         while(running)
         {   
-            if(prevLight.checkActive() == false)
+            if(prevLight.checkActive() == false && SecondPrior.checkActive() == false && ThirdPrior.checkActive() == false)
             {                             
                 NextLight(); 
                 CheckHighestAmount(); 
@@ -318,7 +361,7 @@ public class TrafficSystem extends Thread {
                 
             }
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException ex) {
             Logger.getLogger(TrafficSystem.class.getName()).log(Level.SEVERE, null, ex);
         }            
