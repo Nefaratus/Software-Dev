@@ -172,7 +172,7 @@ public class TrafficSystem extends Thread {
         if(highestPrior != null);
         {
             highestPrior = (NW.getAmount() > highestPrior.getAmount() ? NW : highestPrior);          
-          /*  highestPrior = (NO.getAmount() > highestPrior.getAmount() ? NO : highestPrior);
+            highestPrior = (NO.getAmount() > highestPrior.getAmount() ? NO : highestPrior);
             highestPrior = (NZ.getAmount() > highestPrior.getAmount() ? NZ : highestPrior);
 
             highestPrior = (ON.getAmount() > highestPrior.getAmount() ? ON : highestPrior);
@@ -184,7 +184,7 @@ public class TrafficSystem extends Thread {
 
             highestPrior = (ZW.getAmount() > highestPrior.getAmount() ? ZW : highestPrior);
             highestPrior = (ZN.getAmount() > highestPrior.getAmount() ? ZN : highestPrior);
-*/
+
             System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());
         }
         
@@ -279,13 +279,14 @@ public class TrafficSystem extends Thread {
     public void NextLights(TrafficLight[] possibleLights)
     {
         TrafficLight SecondPrior = new TrafficLight("placeHolder");
+       // TrafficLight SecondPrior = new TrafficLight("placeHolder");
         for (int i = 0; i < possibleLights.length; i++) 
         {
             SecondPrior = (possibleLights[i].amount > SecondPrior.amount ? possibleLights[i] : SecondPrior);
         }
         highestPrior.StartTimer(0);
         SecondPrior.active = true;
-        SecondPrior.StartTimer(0.5f);
+        SecondPrior.StartTimer(1);
         SecondPrior.resetAmount();
     }
     
@@ -308,16 +309,16 @@ public class TrafficSystem extends Thread {
         while(running)
         {   
             if(prevLight.checkActive() == false)
-            {
-                CheckHighestAmount();              
-                NextLight();    
+            {                             
+                NextLight(); 
+                CheckHighestAmount(); 
             }
             else
             {                
-                CheckHighestAmount();
+                
             }
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException ex) {
             Logger.getLogger(TrafficSystem.class.getName()).log(Level.SEVERE, null, ex);
         }            

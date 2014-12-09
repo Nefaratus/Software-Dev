@@ -74,7 +74,10 @@ public class TrafficLight {
                     active = false;
                     break;                
             case 2: stat = "G";    //Green    
-                    StartTimer(6);
+                    if(amount > 7)
+                        StartTimer(amount);
+                    else   
+                        StartTimer(6);
                     //Timer2(6);
                     break;                
             case 3: stat = "O";   //Orange
