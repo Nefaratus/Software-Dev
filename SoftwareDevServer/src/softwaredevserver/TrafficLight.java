@@ -37,6 +37,11 @@ public class TrafficLight {
         this.type = type;
     }
     
+    public char getType()
+    {
+        return type;
+    }
+    
     public void changeAmount(char amount)
     { 
         int n_amount = Character.getNumericValue(amount);
@@ -99,7 +104,6 @@ public class TrafficLight {
         else
         {
             status = 1;
-            System.out.println("The else in " + stoplight + " NextSatus has been called");
         }
     }
     
@@ -115,11 +119,11 @@ public class TrafficLight {
                 if (i < 0)
                 {
                     timer.cancel();
-                    if(active == true)
+                    if(active == true && type != 'T')
                     {
                         NextStatus();
                         String c_Status = Status();
-                        soft.mServer.sent(stoplight+type+c_Status);
+                        //soft.mServer.sent(stoplight+type+c_Status);
                         System.out.println(stoplight+type+c_Status);
                         soft.frame.TekstArea.append(stoplight+type+c_Status + " \n------------------------------------------------------------- \n");
                     }
