@@ -34,7 +34,7 @@ public class SoftwareDevServer {
         Frame();
         mServer.start(); 
         sys.start();
-     
+     /*
         String test = "1NWA1";
        String test2 = "1ZWA9";
        String test3 = "1OWB1";
@@ -42,7 +42,7 @@ public class SoftwareDevServer {
       sys.MessageHandler(test.toCharArray());
        sys.MessageHandler(test2.toCharArray());
        sys.MessageHandler(test3.toCharArray());
-       sys.MessageHandler(test4.toCharArray());
+       sys.MessageHandler(test4.toCharArray());*/
 
     }
     

@@ -24,6 +24,7 @@ public class TrafficSystem extends Thread {
     TrafficLight SecondPrior = new TrafficLight("placeHolder");
     TrafficLight ThirdPrior = new TrafficLight("placeHolder");    
     TrafficLight FietsPrior = new TrafficLight("placeHolder");    
+    TrafficLight FietsLight = new TrafficLight("placeHolder");
     
     public boolean next = true;
     
@@ -49,10 +50,9 @@ public class TrafficSystem extends Thread {
         ThirdPrior.active = false;
         SecondPrior.active = false;
         
-    }
-   
+    }   
     /*
-    
+        Here the incoming message will be sorted and the amount that needs to be changed will be changed.
     */
     public void MessageHandler(char[] message)
     {        
@@ -62,19 +62,22 @@ public class TrafficSystem extends Thread {
         Fiets , if message[from] == Z && message[t] == N // Dit is oost
         */
         
+        //Trein
         if(message[type] == 'T')
         {
             lights.Trein.changeAmount(message[amount]);
-            highestPrior = lights.Trein;
         }
         
+        //Bus
         if(message[type] == 'B')
         {
+            System.out.println(message);
             lights.Bus.changeAmount(message[amount]);
-            highestPrior = lights.Bus;
-        }        
+        }    
+        //Fiets
         else if(message[type] == 'F')
         {
+            System.out.println(message);
            if(message[from] == 'O' && message[to] == 'W') // Dit is noordkant van Oost naar West.
                 lights.FietsOW.changeAmount(message[amount]);
            
@@ -84,7 +87,7 @@ public class TrafficSystem extends Thread {
            if(message[from] == 'Z' && message[to] == 'N') // Dit is oost
                 lights.FietsZN.changeAmount(message[amount]);
         }
-        
+        //Voetganger
         else if(message[type] == 'V')
         {
            if(message[from] == 'O' && message[to] == 'W')
@@ -97,7 +100,7 @@ public class TrafficSystem extends Thread {
                 lights.FietsZN.changeAmount(message[amount]);
         }
         
-        
+        //Auto
         if(message[type] == 'A')
         {
             if(message[from] == 'N')
@@ -162,10 +165,19 @@ public class TrafficSystem extends Thread {
     {
         if(highestPrior != null);
         {
-            for (int i = 0; i < lights.All_Car_Lights.length; i++) {
-                if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
-                    highestPrior = lights.All_Car_Lights[i];
-            }            
+            if(lights.Bus.getAmount() != 0)
+            {
+                highestPrior = lights.Bus;
+                lights.Bus.resetAmount();
+            }
+            else
+            {
+                for (int i = 0; i < lights.All_Car_Lights.length; i++) 
+                {                  
+                    if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
+                        highestPrior = lights.All_Car_Lights[i];
+                }
+            }
             System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());
         }      
     }
@@ -178,7 +190,7 @@ public class TrafficSystem extends Thread {
         SecondPrior = possibleLights[1];
         for (int i = 0; i < possibleLights.length; i++) 
         {
-        System.out.println("This is possible with the First light : " + possibleLights[i].stoplight);
+        System.out.println("This is possible with the First light : " + possibleLights[i].stoplight + possibleLights[i].getType());
             if(possibleLights[i].amount > SecondPrior.amount)
             {
                 String temp = possibleLights[i].stoplight;
@@ -186,7 +198,7 @@ public class TrafficSystem extends Thread {
                     SecondPrior = possibleLights[i];
             }
         }        
-        System.out.println("Second is: " + SecondPrior.stoplight + "\n --------------------------------------------------- \n");
+        System.out.println("Second is: " + SecondPrior.stoplight + SecondPrior.getType()+ "\n --------------------------------------------------- \n");
         SecondPrior.active = true;
         SecondPrior.resetAmount(); 
         ThirdLight(lights.CheckPossibilities(SecondPrior),possibleLights);
@@ -195,27 +207,51 @@ public class TrafficSystem extends Thread {
     /*
         In this method it will be decided which light is the third light that turns to green with the previous two.
     */
-    public void ThirdLight(TrafficLight[] possibleLights, TrafficLight[] possibleFromSecond)
+    public void ThirdLight(TrafficLight[] possibleLights, TrafficLight[] possibleInSecond)
     {
         System.out.println(possibleLights.length);
         for (int i = 0; i < possibleLights.length; i++) 
         {           
-            for (int j = 0; j < possibleFromSecond.length; j++) {
-                if(possibleLights[i].stoplight == possibleFromSecond[j].stoplight)
+            for (int j = 0; j < possibleInSecond.length; j++) {
+                if(possibleLights[i].stoplight == possibleInSecond[j].stoplight)
                 {
-                    System.out.println("This is possible with the Second: " + possibleLights[i].stoplight);                    
+                    System.out.println("This is possible with the Second: " + possibleLights[i].stoplight + possibleLights[i].getType());                    
                     String temp = possibleLights[i].stoplight;
                      if(temp != ThirdPrior.stoplight && temp != highestPrior.stoplight && temp != SecondPrior.stoplight || possibleLights[i].amount > ThirdPrior.amount && possibleLights[i].amount > 0)
                             ThirdPrior = possibleLights[i];              
                 }
             }
-            //if(possibleLights[i].stoplight != highestPrior.stoplight && possibleLights[i].stoplight != SecondPrior.stoplight )
-              //  ThirdPrior = (possibleLights[i].amount > ThirdPrior.amount ? possibleLights[i] : ThirdPrior);
         }    
-        System.out.println("Thirdprior is: " + ThirdPrior.stoplight + "\n --------------------------------------------------- \n");
-        
+        System.out.println("Thirdprior is: " + ThirdPrior.stoplight + ThirdPrior.getType() + "\n --------------------------------------------------- \n");
         ThirdPrior.active = true;
         ThirdPrior.resetAmount();
+        CheckFiets(lights.CheckPossibilities(ThirdPrior),possibleInSecond,possibleLights);
+    }
+    
+    public void CheckFiets(TrafficLight[] possibleLights, TrafficLight[] possibleInSecond,TrafficLight[] possibleInThird)
+    {
+        for (int i = 0; i < possibleLights.length; i++) {
+            for (int j = 0; j < possibleInSecond.length; j++) {
+                for (int k = 0; k < possibleInThird.length; k++) {
+                    if(possibleLights[i].stoplight == possibleInSecond[j].stoplight && possibleLights[i].stoplight == possibleInThird[k].stoplight)
+                    {                         
+                      if(possibleLights[i].getType() == 'F')
+                      {
+                          String temp = possibleLights[i].stoplight;
+                          if(FietsLight.stoplight != temp)
+                          {                              
+                            System.out.println("\n ----------------------------------------------------------------- \n");
+                            System.out.println("This is possible Fiets Licht: " + possibleLights[i].stoplight);  
+                            FietsLight = possibleLights[i];
+                            FietsLight.active = true;
+                            FietsLight.resetAmount();
+                            FietsLight.StartTimer(0);
+                          }
+                      }
+                    }
+               }
+            }   
+        }        
         ActivateLights();
     }
     

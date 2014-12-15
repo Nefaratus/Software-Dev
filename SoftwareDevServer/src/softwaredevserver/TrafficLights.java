@@ -98,7 +98,7 @@ public class TrafficLights {
             /* Bus */ 
             if(c_Light.stoplight == "OW" && c_Light.getType() == 'B')
             {
-                possibleLights = new TrafficLight[]{WO,WZ};
+                possibleLights = new TrafficLight[]{WO,WZ,FietsOW};
                 return possibleLights;
             }
         }
@@ -108,52 +108,52 @@ public class TrafficLights {
             /* Car Part */ 
             if(c_Light.stoplight == "NW")
             {
-              possibleLights = new TrafficLight[]{NO,NZ,ON,ZN,WN,WO,WZ};                     
+              possibleLights = new TrafficLight[]{NO,NZ,ON,ZN,WN,WO,WZ,FietsZN};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "NZ")
             {
-              possibleLights = new TrafficLight[]{NO,NW,ON,ZN};                     
+              possibleLights = new TrafficLight[]{NO,NW,ON,ZN,FietsZN,FietsNZ};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "NO")
             {
-              possibleLights = new TrafficLight[]{NZ, NW, ON, WZ};                     
+              possibleLights = new TrafficLight[]{NZ, NW, ON, WZ,FietsNZ};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "ZN")
             {
-              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ};                    
+              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ,FietsZN,FietsNZ};                    
               return possibleLights; 
             }
             if(c_Light.stoplight == "ZW")
             {
-              possibleLights = new TrafficLight[]{ZN, ON, WZ};                     
+              possibleLights = new TrafficLight[]{ZN, ON, WZ,FietsZN,FietsOW};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "ON")
             {
-              possibleLights = new TrafficLight[]{NO, NZ, NW, OW, ZW, WO, WZ};                    
+              possibleLights = new TrafficLight[]{NO, NZ, NW, OW, ZW, WO, WZ,FietsNZ};                    
               return possibleLights;
             }
             if(c_Light.stoplight == "OW")
             {
-              possibleLights = new TrafficLight[]{ON, WO, WZ};                     
+              possibleLights = new TrafficLight[]{ON, WO, WZ,FietsOW};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "WN")
             {
-              possibleLights = new TrafficLight[]{NW, WO, WZ};                     
+              possibleLights = new TrafficLight[]{NW, WO, WZ,FietsZN};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "WO")
             {
-              possibleLights = new TrafficLight[]{ON, NW, OW, WN, WZ};                    
+              possibleLights = new TrafficLight[]{ON, NW, OW, WN, WZ,FietsOW};                    
               return possibleLights;
             }
             if(c_Light.stoplight == "WZ")
             {
-              possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO};                    
+              possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO,FietsZN,FietsOW};                    
               return possibleLights;
             }
         }

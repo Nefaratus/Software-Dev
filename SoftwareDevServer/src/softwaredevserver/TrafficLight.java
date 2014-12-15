@@ -123,9 +123,8 @@ public class TrafficLight {
                     {
                         NextStatus();
                         String c_Status = Status();
-                       // soft.mServer.sent(stoplight+type+c_Status);
+                        soft.mServer.sent(stoplight+type+c_Status);
                         System.out.println(stoplight+type+c_Status);
-                        soft.frame.TekstArea.append(type+c_Status + " \n------------------------------------------------------------- \n");
                     }
                     if(active == true && type == 'T')
                     {                        
