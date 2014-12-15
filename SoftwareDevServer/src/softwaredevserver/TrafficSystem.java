@@ -158,7 +158,7 @@ public class TrafficSystem extends Thread {
         }                
     }
    
-    public void CheckHighestAmount()
+    public void HighestPriorLight()
     {
         if(highestPrior != null);
         {
@@ -169,8 +169,10 @@ public class TrafficSystem extends Thread {
             System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());
         }      
     }
-  
     
+    /*
+        In this method it will be decided which light is the second that will be turned on based on what is possible.
+    */
     public void SecondLight(TrafficLight[] possibleLights)
     {
         SecondPrior = possibleLights[1];
@@ -190,17 +192,18 @@ public class TrafficSystem extends Thread {
         ThirdLight(lights.CheckPossibilities(SecondPrior),possibleLights);
     }
     
+    /*
+        In this method it will be decided which light is the third light that turns to green with the previous two.
+    */
     public void ThirdLight(TrafficLight[] possibleLights, TrafficLight[] possibleFromSecond)
     {
         System.out.println(possibleLights.length);
         for (int i = 0; i < possibleLights.length; i++) 
-        {
-           
+        {           
             for (int j = 0; j < possibleFromSecond.length; j++) {
                 if(possibleLights[i].stoplight == possibleFromSecond[j].stoplight)
-                {    
-                    System.out.println("This is possible with the Second: " + possibleLights[i].stoplight);
-                    
+                {
+                    System.out.println("This is possible with the Second: " + possibleLights[i].stoplight);                    
                     String temp = possibleLights[i].stoplight;
                      if(temp != ThirdPrior.stoplight && temp != highestPrior.stoplight && temp != SecondPrior.stoplight || possibleLights[i].amount > ThirdPrior.amount && possibleLights[i].amount > 0)
                             ThirdPrior = possibleLights[i];              
@@ -245,7 +248,7 @@ public class TrafficSystem extends Thread {
             if(prevLight.checkActive() == false && SecondPrior.checkActive() == false && ThirdPrior.checkActive() == false)
             {                             
                 NextLight(); 
-                CheckHighestAmount(); 
+                HighestPriorLight(); 
             }
             else
             {                
