@@ -150,7 +150,7 @@ public class TrafficSystem extends Thread {
             if(message[from] == 'Z')
             {
                 if(message[to] == 'W')
-                {                               
+                {                          
                     lights.ZW.changeAmount(message[amount]);
                 }
                 if(message[to] == 'N' || message[2] == 'O')
@@ -173,7 +173,11 @@ public class TrafficSystem extends Thread {
             else
             {
                 for (int i = 0; i < lights.All_Car_Lights.length; i++) 
-                {                  
+                {       
+                    if((lights.All_Car_Lights[i].stoplight == "WN" || lights.All_Car_Lights[i].stoplight == "ZW") && lights.All_Car_Lights[i].getAmount() >= 2)
+                    {
+                        lights.All_Car_Lights[i].amount += 3;
+                    }
                     if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
                         highestPrior = lights.All_Car_Lights[i];
                 }
@@ -213,7 +217,7 @@ public class TrafficSystem extends Thread {
         for (int i = 0; i < possibleLights.length; i++) 
         {           
             for (int j = 0; j < possibleInSecond.length; j++) {
-                if(possibleLights[i].stoplight == possibleInSecond[j].stoplight)
+                if(possibleLights[i].stoplight == possibleInSecond[j].stoplight && possibleLights[i].getType() == possibleInSecond[j].getType())
                 {
                     System.out.println("This is possible with the Second: " + possibleLights[i].stoplight + possibleLights[i].getType());                    
                     String temp = possibleLights[i].stoplight;
@@ -232,21 +236,22 @@ public class TrafficSystem extends Thread {
     {
         for (int i = 0; i < possibleLights.length; i++) {
             for (int j = 0; j < possibleInSecond.length; j++) {
-                for (int k = 0; k < possibleInThird.length; k++) {
-                    if(possibleLights[i].stoplight == possibleInSecond[j].stoplight && possibleLights[i].stoplight == possibleInThird[k].stoplight)
-                    {                         
-                      if(possibleLights[i].getType() == 'F')
-                      {
+                for (int k = 0; k < possibleInThird.length; k++) {    
+                    
+                    if(possibleLights[i].getType() == 'F' && possibleInSecond[j].getType() == 'F' && possibleInThird[k].getType() == 'F')
+                    {
+                        if((possibleLights[i].stoplight == possibleInSecond[j].stoplight) && (possibleLights[i].stoplight == possibleInThird[k].stoplight) && possibleLights[i].getType() == 'F')
+                        {
                           String temp = possibleLights[i].stoplight;
                           if(FietsLight.stoplight != temp)
                           {                              
                             System.out.println("\n ----------------------------------------------------------------- \n");
-                            System.out.println("This is possible Fiets Licht: " + possibleLights[i].stoplight);  
+                            System.out.println("This is possible Bike Light: " + possibleLights[i].stoplight);  
                             FietsLight = possibleLights[i];
                             FietsLight.active = true;
                             FietsLight.resetAmount();
                             FietsLight.StartTimer(0);
-                          }
+                        }
                       }
                     }
                }

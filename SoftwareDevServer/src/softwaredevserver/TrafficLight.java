@@ -20,6 +20,7 @@ public class TrafficLight {
     private char type;
     public boolean active;
     public int amount;
+    private String c_Status;
     public SoftwareDevServer soft;
         
        static Timer timer;
@@ -122,9 +123,12 @@ public class TrafficLight {
                     if(active == true && type != 'T')
                     {
                         NextStatus();
-                        String c_Status = Status();
+                        c_Status = Status();
                         soft.mServer.sent(stoplight+type+c_Status);
-                        System.out.println(stoplight+type+c_Status);
+                        if(type == 'F')
+                        {
+                            soft.mServer.sent(stoplight+'V'+c_Status);
+                        }
                     }
                     if(active == true && type == 'T')
                     {                        
@@ -132,8 +136,7 @@ public class TrafficLight {
                     }
                     else
                     {
-                        timer.cancel();                        
-                        //status = 0;                        
+                        timer.cancel();                       
                     }
                 }
             }
