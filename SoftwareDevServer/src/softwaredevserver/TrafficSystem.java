@@ -176,7 +176,8 @@ public class TrafficSystem extends Thread {
                 {       
                     if((lights.All_Car_Lights[i].stoplight == "WN" || lights.All_Car_Lights[i].stoplight == "ZW") && lights.All_Car_Lights[i].getAmount() >= 2)
                     {
-                        lights.All_Car_Lights[i].amount += 3;
+                        System.out.println("Been here with " +  lights.All_Car_Lights[i].stoplight );
+                        lights.All_Car_Lights[i].changeAmount(1);
                     }
                     if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
                         highestPrior = lights.All_Car_Lights[i];

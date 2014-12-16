@@ -20,8 +20,6 @@ public class SoftwareDevServer {
      * @param args the command line arguments
      */
     
-    
- 
     static boolean active = true;
     static ServerFrame frame = new ServerFrame();
     static TrafficSystem sys;
@@ -53,14 +51,10 @@ public class SoftwareDevServer {
   
      public static Server mServer = new Server(new Server.OnMessageReceived() {
         public void messageReceived(String message) {
-          //  System.out.println(message);
-           
-       // frame.TekstArea.append("Client: " + message + "\n");
+            
             try{
-                             
-                //System.out.println(message);                  
+                                      
                 sys.MessageHandler(message.toCharArray());
-                // mServer.sent(x.response);
                 prevMessage = message;
                 
             }catch(Exception e)

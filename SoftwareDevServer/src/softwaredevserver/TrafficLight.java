@@ -42,7 +42,7 @@ public class TrafficLight {
     {
         return type;
     }
-    
+        
     public void changeAmount(char amount)
     { 
         int n_amount = Character.getNumericValue(amount);
@@ -50,6 +50,11 @@ public class TrafficLight {
         {
             this.amount = n_amount;
         }
+    }
+    
+    public void changeAmount(int amount)
+    {
+       this.amount += amount;      
     }
     
     public boolean checkActive()
