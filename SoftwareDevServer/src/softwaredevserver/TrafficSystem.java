@@ -65,7 +65,10 @@ public class TrafficSystem extends Thread {
         //Trein
         if(message[type] == 'T')
         {
+            System.out.println(message);
             lights.Trein.changeAmount(message[amount]);
+            lights.TreinInc = true;
+            System.out.println("Has been set on true");
         }
         
         //Bus
@@ -77,7 +80,6 @@ public class TrafficSystem extends Thread {
         //Fiets
         else if(message[type] == 'F')
         {
-            System.out.println(message);
            if(message[from] == 'O' && message[to] == 'W') // Dit is noordkant van Oost naar West.
                 lights.FietsOW.changeAmount(message[amount]);
            
@@ -160,27 +162,62 @@ public class TrafficSystem extends Thread {
             }
         }                
     }
-   
+    /*
+        
+    */
+    public void NextLight()
+    {
+        
+        if(highestPrior.amount > 0)
+        {
+            System.out.println("Next Light : " + highestPrior.stoplight); 
+            highestPrior.active = true;    
+            
+            if(highestPrior.getType() == 'T')            
+                SecondLight(lights.CheckPossibilities(highestPrior));
+            
+            else
+                SecondLight(lights.CheckPossibilities(highestPrior));
+            
+            prevLight = highestPrior;
+            prevLight.resetAmount();
+        }
+    }
+    
+    /* 
+        In this Method the trafficLight with the highest Priority will be selected. 
+        It will first look if there is a train coming. else if there is a bus. 
+        In the last case it will see which trafficLight has the biggest amount of cars waiting
+    */
     public void HighestPriorLight()
     {
         if(highestPrior != null);
         {
-            if(lights.Bus.getAmount() != 0)
+            if(lights.TreinInc == true)
             {
-                highestPrior = lights.Bus;
-                lights.Bus.resetAmount();
+                
+                System.out.println("Been in the HighestPrior for Trein");
+                highestPrior = lights.Trein;
+                
             }
             else
             {
-                for (int i = 0; i < lights.All_Car_Lights.length; i++) 
-                {       
-                    if((lights.All_Car_Lights[i].stoplight == "WN" || lights.All_Car_Lights[i].stoplight == "ZW") && lights.All_Car_Lights[i].getAmount() >= 2)
-                    {
-                        System.out.println("Been here with " +  lights.All_Car_Lights[i].stoplight );
-                        lights.All_Car_Lights[i].changeAmount(1);
+                if(lights.Bus.getAmount() != 0)
+                {
+                    highestPrior = lights.Bus;
+                    lights.Bus.resetAmount();
+                }
+                else
+                {
+                    for (int i = 0; i < lights.All_Car_Lights.length; i++) 
+                    {       
+                        if((lights.All_Car_Lights[i].stoplight == "WN" || lights.All_Car_Lights[i].stoplight == "ZW") && lights.All_Car_Lights[i].getAmount() >= 2)
+                        {
+                            lights.All_Car_Lights[i].changeAmount(1);
+                        } 
+                        if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
+                            highestPrior = lights.All_Car_Lights[i];
                     }
-                    if(lights.All_Car_Lights[i].getAmount() > highestPrior.getAmount())
-                        highestPrior = lights.All_Car_Lights[i];
                 }
             }
             System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());
@@ -233,6 +270,10 @@ public class TrafficSystem extends Thread {
         CheckFiets(lights.CheckPossibilities(ThirdPrior),possibleInSecond,possibleLights);
     }
     
+    /*
+        This method will check if there is a possibility for a bikelight to go green or not.
+        Either way after its done checking it will call the Activate Light method.
+    */
     public void CheckFiets(TrafficLight[] possibleLights, TrafficLight[] possibleInSecond,TrafficLight[] possibleInThird)
     {
         for (int i = 0; i < possibleLights.length; i++) {
@@ -261,25 +302,15 @@ public class TrafficSystem extends Thread {
         ActivateLights();
     }
     
+    /* 
+        Activates the lights with a small delay so it won't spam the 
+    */
     public void ActivateLights()
     {
-        highestPrior.StartTimer(0);
+        float time = (highestPrior.getType() == 'T' ? 30 : 0 );
+        highestPrior.StartTimer(time);
         SecondPrior.StartTimer(0.5f);        
         ThirdPrior.StartTimer(1);
-    }
-    
-    public void NextLight()
-    {
-        
-        if(highestPrior.amount > 0)
-        {
-            System.out.println("Next Light : " + highestPrior.stoplight); 
-            highestPrior.active = true;    
-            //CheckPossibilities(highestPrior);
-            SecondLight(lights.CheckPossibilities(highestPrior));
-            prevLight = highestPrior;
-            prevLight.resetAmount();
-        }
     }
     
     
@@ -291,6 +322,10 @@ public class TrafficSystem extends Thread {
             {                             
                 NextLight(); 
                 HighestPriorLight(); 
+            }
+            if(prevLight.getType() == 'T' && SecondPrior.checkActive() == false && ThirdPrior.checkActive() == false)
+            {                           
+                NextLight(); 
             }
             else
             {                

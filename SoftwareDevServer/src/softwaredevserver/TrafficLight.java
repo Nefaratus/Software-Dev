@@ -137,7 +137,12 @@ public class TrafficLight {
                     }
                     if(active == true && type == 'T')
                     {                        
-                        System.out.println(i);
+                        if(i < 2)
+                        {
+                            soft.sys.lights.TreinInc = false;
+                            System.out.println("Been here so TreinInc is false");
+                            active = false;
+                        }
                     }
                     else
                     {

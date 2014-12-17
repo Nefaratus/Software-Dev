@@ -30,14 +30,16 @@ public class TrafficLights {
     TrafficLight ZW = new TrafficLight("ZW");
     TrafficLight ZN = new TrafficLight("ZN");
    
-    TrafficLight Trein = new TrafficLight("T");
+    TrafficLight Trein = new TrafficLight("OW");
     TrafficLight Bus = new TrafficLight("OW");
     TrafficLight FietsNZ = new TrafficLight("NZ");
     TrafficLight FietsZN = new TrafficLight("ZN");
     TrafficLight FietsOW = new TrafficLight("OW");
     
-   
+    public boolean TreinInc = false;
+    
     TrafficLight[] All_Car_Lights = new TrafficLight[]{NW,NO,NZ,ON,OW,WZ,WN,WO,ZW,ZN};
+    TrafficLight[] Special_Train_Lights = new TrafficLight[]{NW,NO,OW,WN,WO,FietsOW,FietsNZ,FietsZN};
     
     public TrafficLights()
     {        
@@ -93,6 +95,13 @@ public class TrafficLights {
             WO -> ON NW OW WN WZ
             WZ -> NO NW ON OW ZNO ZW WN WO
         */
+        /* Train part */ 
+        if(c_Light.getType() == 'T')
+        {
+            possibleLights = Special_Train_Lights;
+            return possibleLights;
+        }
+        
         if(c_Light.getType() == 'B')
         {
             /* Bus */ 
@@ -117,36 +126,15 @@ public class TrafficLights {
               possibleLights = new TrafficLight[]{ON, NW, OW, WN, WZ,FietsOW};                    
               return possibleLights;
             }
-            if(c_Light.stoplight == "WZ")
-            {
-              possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO,FietsZN,FietsOW};                    
-              return possibleLights;
-            }
-              
+                         
             if(c_Light.stoplight == "NW")
             {
               possibleLights = new TrafficLight[]{WN,NO,NZ,ON,ZN,WO,WZ,FietsZN};                     
               return possibleLights;
             }
-            if(c_Light.stoplight == "NZ")
-            {
-              possibleLights = new TrafficLight[]{NO,NW,ON,ZN,FietsZN,FietsNZ};                     
-              return possibleLights;
-            }
             if(c_Light.stoplight == "NO")
             {
               possibleLights = new TrafficLight[]{NZ, NW, ON, WZ,FietsNZ};                     
-              return possibleLights;
-            }
-
-            if(c_Light.stoplight == "ZN")
-            {
-              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ,FietsZN,FietsNZ};                    
-              return possibleLights; 
-            }
-            if(c_Light.stoplight == "ZW")
-            {
-              possibleLights = new TrafficLight[]{ZN, ON, WZ,FietsZN,FietsOW};                     
               return possibleLights;
             }
             if(c_Light.stoplight == "ON")
@@ -159,6 +147,28 @@ public class TrafficLights {
               possibleLights = new TrafficLight[]{ON, WO, WZ,FietsOW};                     
               return possibleLights;
             }
+            if(c_Light.stoplight == "ZW")
+            {
+              possibleLights = new TrafficLight[]{ZN, ON, WZ,FietsZN,FietsOW};                     
+              return possibleLights;
+            }
+            
+            if(c_Light.stoplight == "NZ")
+            {
+              possibleLights = new TrafficLight[]{NO,NW,ON,ZN,FietsZN,FietsNZ};                     
+              return possibleLights;
+            }
+            if(c_Light.stoplight == "ZN")
+            {
+              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ,FietsZN,FietsNZ};                    
+              return possibleLights; 
+            }
+            if(c_Light.stoplight == "WZ")
+            {
+              possibleLights = new TrafficLight[]{NO, NW, ON, OW, ZN, ZW, WN, WO,FietsZN,FietsOW};                    
+              return possibleLights;
+            }
+            
         }
         
         /* Bike Part */ 
