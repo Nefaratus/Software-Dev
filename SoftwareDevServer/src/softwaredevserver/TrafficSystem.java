@@ -171,8 +171,7 @@ public class TrafficSystem extends Thread {
         {
             System.out.println("Next Light : " + highestPrior.stoplight); 
             highestPrior.active = true;    
-            SecondLight(lights.CheckPossibilities(highestPrior));
-            
+            SecondLight(lights.CheckPossibilities(highestPrior));            
             prevLight = highestPrior;
             prevLight.resetAmount();
         }
@@ -200,7 +199,7 @@ public class TrafficSystem extends Thread {
                     lights.Bus.resetAmount();
                 }
                 else
-                {
+                {                    
                     for (int i = 0; i < lights.All_Car_Lights.length; i++) 
                     {       
                         if((lights.All_Car_Lights[i].stoplight == "WN" || lights.All_Car_Lights[i].stoplight == "ZW") && lights.All_Car_Lights[i].getAmount() >= 2)
@@ -299,8 +298,7 @@ public class TrafficSystem extends Thread {
     */
     public void ActivateLights()
     {
-        float time = (highestPrior.getType() == 'T' ? 5 : 0 );
-        if(highestPrior.getType() == 'T')
+        float time = (highestPrior.getType() == 'T' ? 10 : 0 );
         highestPrior.StartTimer(time);
         SecondPrior.StartTimer(0.5f);        
         ThirdPrior.StartTimer(1);
