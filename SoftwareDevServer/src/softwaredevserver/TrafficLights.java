@@ -160,7 +160,7 @@ public class TrafficLights {
             }
             if(c_Light.stoplight == "ZN")
             {
-              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ,FietsNZ};                    
+              possibleLights = new TrafficLight[]{NZ, NW, ZW, WZ,FietsZN,FietsNZ};                    
               return possibleLights; 
             }
             if(c_Light.stoplight == "WZ")
