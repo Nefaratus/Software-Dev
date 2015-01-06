@@ -37,7 +37,6 @@ public class TrafficSystem extends Thread {
     private int type = 3;
     private int amount = 4;
         
-    TrafficLock Lock;
     TrafficLights lights = new TrafficLights();
     
     public TrafficSystem()
@@ -168,16 +167,11 @@ public class TrafficSystem extends Thread {
     public void NextLight()
     {
         
-        if(highestPrior.amount > 0)
+        if(highestPrior.amount > 0 || highestPrior.getType() == 'B' || highestPrior.getType() == 'T')
         {
             System.out.println("Next Light : " + highestPrior.stoplight); 
             highestPrior.active = true;    
-            
-            if(highestPrior.getType() == 'T')            
-                SecondLight(lights.CheckPossibilities(highestPrior));
-            
-            else
-                SecondLight(lights.CheckPossibilities(highestPrior));
+            SecondLight(lights.CheckPossibilities(highestPrior));
             
             prevLight = highestPrior;
             prevLight.resetAmount();
@@ -194,11 +188,9 @@ public class TrafficSystem extends Thread {
         if(highestPrior != null);
         {
             if(lights.TreinInc == true)
-            {
-                
+            {                
                 System.out.println("Been in the HighestPrior for Trein");
-                highestPrior = lights.Trein;
-                
+                highestPrior = lights.Trein;                
             }
             else
             {
@@ -220,7 +212,7 @@ public class TrafficSystem extends Thread {
                     }
                 }
             }
-            System.out.println(highestPrior.stoplight + " amount : " + highestPrior.getAmount());
+            System.out.println(highestPrior.stoplight + highestPrior.getType() + " amount : " + highestPrior.getAmount());
         }      
     }
     
@@ -307,7 +299,8 @@ public class TrafficSystem extends Thread {
     */
     public void ActivateLights()
     {
-        float time = (highestPrior.getType() == 'T' ? 30 : 0 );
+        float time = (highestPrior.getType() == 'T' ? 5 : 0 );
+        if(highestPrior.getType() == 'T')
         highestPrior.StartTimer(time);
         SecondPrior.StartTimer(0.5f);        
         ThirdPrior.StartTimer(1);
@@ -324,7 +317,8 @@ public class TrafficSystem extends Thread {
                 HighestPriorLight(); 
             }
             if(prevLight.getType() == 'T' && SecondPrior.checkActive() == false && ThirdPrior.checkActive() == false)
-            {                           
+            {     
+                
                 NextLight(); 
             }
             else
