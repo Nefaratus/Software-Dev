@@ -196,7 +196,6 @@ public class TrafficSystem extends Thread {
                 if(lights.Bus.getAmount() != 0)
                 {
                     highestPrior = lights.Bus;
-                    lights.Bus.resetAmount();
                 }
                 else
                 {                    
@@ -220,17 +219,24 @@ public class TrafficSystem extends Thread {
     */
     public void SecondLight(TrafficLight[] possibleLights)
     {
-        SecondPrior = possibleLights[1];
-        for (int i = 0; i < possibleLights.length; i++) 
+        if(lights.Bus.getAmount() != 0 && highestPrior.getType() == 'T')
         {
-        System.out.println("This is possible with the First light : " + possibleLights[i].stoplight + possibleLights[i].getType());
-            if(possibleLights[i].amount > SecondPrior.amount)
+            SecondPrior = lights.Bus;
+        }
+        else
+        {
+            SecondPrior = possibleLights[1];
+            for (int i = 0; i < possibleLights.length; i++) 
             {
-                String temp = possibleLights[i].stoplight;
-                if(!SecondPrior.stoplight.equals(temp) && possibleLights[i].amount > 0)
-                    SecondPrior = possibleLights[i];
-            }
-        }        
+            System.out.println("This is possible with the First light : " + possibleLights[i].stoplight + possibleLights[i].getType());
+                if(possibleLights[i].amount > SecondPrior.amount)
+                {
+                    String temp = possibleLights[i].stoplight;
+                    if(!SecondPrior.stoplight.equals(temp) && possibleLights[i].amount > 0)
+                        SecondPrior = possibleLights[i];
+                }
+            }       
+        }
         System.out.println("Second is: " + SecondPrior.stoplight + SecondPrior.getType()+ "\n --------------------------------------------------- \n");
         SecondPrior.active = true;
         SecondPrior.resetAmount(); 
@@ -315,8 +321,7 @@ public class TrafficSystem extends Thread {
                 HighestPriorLight(); 
             }
             if(prevLight.getType() == 'T' && SecondPrior.checkActive() == false && ThirdPrior.checkActive() == false)
-            {     
-                
+            {   
                 NextLight(); 
             }
             else

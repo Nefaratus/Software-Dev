@@ -120,7 +120,7 @@ public class TrafficLight {
             
             float i = time;
             public void run() {
-                
+                if(type == 'T')
                     System.out.println(i);
                 i--;
                 if (i < 0)
